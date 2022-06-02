@@ -1,3 +1,6 @@
 [submodule "rc-operator"]
 	path = rc-operator
 	url = https://github.com/amarchese96/rc-operator.git
+[submodule "telemetry-service"]
+	path = telemetry-service
+	url = https://github.com/amarchese96/telemetry-service.git
