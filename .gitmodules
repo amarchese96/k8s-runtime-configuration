@@ -1,0 +1,3 @@
+[submodule "rc-operator"]
+	path = rc-operator
+	url = https://github.com/amarchese96/rc-operator.git
