@@ -1,0 +1,9 @@
+apiVersion: unict.it/v1alpha1
+kind: Application
+metadata:
+  name: sockshop-app
+spec:
+  name: sock-shop
+  namespace: sock-shop
+  topologyKey: "kubernetes.io/region"
+  rescheduleDelay: 60
