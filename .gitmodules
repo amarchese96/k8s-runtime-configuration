@@ -4,3 +4,6 @@
 [submodule "telemetry-service"]
 	path = telemetry-service
 	url = https://github.com/amarchese96/telemetry-service.git
+[submodule "topology-operator"]
+	path = topology-operator
+	url = https://github.com/amarchese96/topology-operator.git
