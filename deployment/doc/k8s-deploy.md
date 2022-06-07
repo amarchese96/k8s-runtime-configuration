@@ -1,3 +1,8 @@
+- Install mentat component
+```
+kubectl apply -f mentat.yml
+```
+
 - Install Istio
 ```
 istioctl install --set profile=demo -y
