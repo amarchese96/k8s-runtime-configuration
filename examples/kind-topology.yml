@@ -1,0 +1,11 @@
+apiVersion: unict.it/v1alpha1
+kind: Topology
+metadata:
+  name: kind-topology
+spec:
+  nodes:
+  - kind-control-plane 
+  - kind-worker
+  - kind-worker2
+  - kind-worker3
+  rescheduleDelay: 30

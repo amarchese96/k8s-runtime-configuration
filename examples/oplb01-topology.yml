@@ -1,0 +1,11 @@
+apiVersion: unict.it/v1alpha1
+kind: Topology
+metadata:
+  name: oplb01-topology
+spec:
+  nodes:
+  - kube-master-01
+  - kube-slave-01
+  - kube-slave-02
+  - kube-slave-03
+  rescheduleDelay: 30
