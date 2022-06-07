@@ -3,29 +3,30 @@ kind: Deployment
 metadata:
   labels:
     app: bookinfo
-    node: details
+    svc: details
   name: details
 spec:
   selector:
     matchLabels:
       app: bookinfo
-      node: details
+      svc: details
   template:
     metadata:
       labels:
         app: bookinfo
-        node: details
+        svc: details
     spec:
       containers:
       - image: docker.io/istio/examples-bookinfo-details-v1:1.16.2
         name: details
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     app: bookinfo
-    node: details
+    svc: details
   name: details
 spec:
   ports:
@@ -34,36 +35,37 @@ spec:
     protocol: TCP
   selector:
     app: bookinfo
-    node: details
+    svc: details
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app: bookinfo
-    node: mongodb
+    svc: mongodb
   name: mongodb
 spec:
   selector:
     matchLabels:
       app: bookinfo
-      node: mongodb
+      svc: mongodb
   template:
     metadata:
       labels:
         app: bookinfo
-        node: mongodb
+        svc: mongodb
     spec:
       containers:
       - image: docker.io/istio/examples-bookinfo-mongodb:1.16.2
         name: mongodb
+      schedulerName: scheduler-plugins-scheduler  
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     app: bookinfo
-    node: mongodb
+    svc: mongodb
   name: mongodb
 spec:
   ports:
@@ -73,38 +75,39 @@ spec:
     targetPort: 27017
   selector:
     app: bookinfo
-    node: mongodb
+    svc: mongodb
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app: bookinfo
-    node: productpage
+    svc: productpage
   name: productpage
 spec:
   selector:
     matchLabels:
       app: bookinfo
-      node: productpage
+      svc: productpage
   template:
     metadata:
       labels:
         app: bookinfo
-        node: productpage
+        svc: productpage
     spec:
       containers:
       - image: docker.io/istio/examples-bookinfo-productpage-v1:1.16.2
         name: productpage
         securityContext:
           runAsUser: 1000
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     app: bookinfo
-    node: productpage
+    svc: productpage
   name: productpage
 spec:
   ports:
@@ -115,7 +118,7 @@ spec:
     targetPort: 9080
   selector:
     app: bookinfo
-    node: productpage
+    svc: productpage
   type: NodePort
 ---
 apiVersion: apps/v1
@@ -123,31 +126,32 @@ kind: Deployment
 metadata:
   labels:
     app: bookinfo
-    node: reviews
+    svc: reviews
   name: reviews
 spec:
   selector:
     matchLabels:
       app: bookinfo
-      node: reviews
+      svc: reviews
   template:
     metadata:
       labels:
         app: bookinfo
-        node: reviews
+        svc: reviews
     spec:
       containers:
       - image: docker.io/istio/examples-bookinfo-reviews-v2:1.16.2
         name: reviews
         securityContext:
           runAsUser: 1000
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     app: bookinfo
-    node: reviews
+    svc: reviews
   name: reviews
 spec:
   ports:
@@ -157,25 +161,25 @@ spec:
     targetPort: 9080
   selector:
     app: bookinfo
-    node: reviews
+    svc: reviews
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app: bookinfo
-    node: ratings
+    svc: ratings
   name: ratings
 spec:
   selector:
     matchLabels:
       app: bookinfo
-      node: ratings
+      svc: ratings
   template:
     metadata:
       labels:
         app: bookinfo
-        node: ratings
+        svc: ratings
     spec:
       containers:
       - image: docker.io/istio/examples-bookinfo-ratings-v2:1.16.2
@@ -185,13 +189,14 @@ spec:
           value: mongodb://mongodb:27017/test
         securityContext:
           runAsUser: 1000
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     app: bookinfo
-    node: ratings
+    svc: ratings
   name: ratings
 spec:
   ports:
@@ -201,4 +206,4 @@ spec:
     targetPort: 9080
   selector:
     app: bookinfo
-    node: ratings
+    svc: ratings

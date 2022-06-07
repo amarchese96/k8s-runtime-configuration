@@ -5,5 +5,5 @@ metadata:
 spec:
   name: bookinfo
   namespace: default
-  topologyKey: "kubernetes.io/region"
-  rescheduleDelay: 60
+  topologyKey: "no-key"
+  rescheduleDelay: 90
