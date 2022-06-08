@@ -7,3 +7,7 @@
 [submodule "topology-operator"]
 	path = topology-operator
 	url = https://github.com/amarchese96/topology-operator.git
+[submodule "scheduler-plugins"]
+	path = scheduler-plugins
+	url = https://github.com/amarchese96/scheduler-plugins.git
+	branch = nascheduling
