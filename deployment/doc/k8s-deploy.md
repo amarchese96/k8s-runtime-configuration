@@ -35,6 +35,23 @@ kubectl apply -f observability/jaeger.yml
 kubectl apply -f observability/kiali.yml
 ```
 
+- Install telemetry-service:
+```
+kubectl apply -f telemetry-service.yml
+```
+
+- Install topology operator (execute the command inside the topology-operator folder located at the root of the project):
+```
+make install
+make deploy
+```
+
+- Install runtime-configuration operator (execute the command inside the rc-operator folder located at the root of the project):
+```
+make install
+make deploy
+```
+
 - Clean up
 ```
 kubectl delete -f observability/kiali.yml
