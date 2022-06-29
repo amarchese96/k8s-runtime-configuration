@@ -498,6 +498,8 @@ spec:
           mountPath: "/kiali-secret"
         - name: kiali-cabundle
           mountPath: "/kiali-cabundle"
+      nodeSelector:
+        kubernetes.io/hostname: kube-master-01
       volumes:
       - name: kiali-configuration
         configMap:
