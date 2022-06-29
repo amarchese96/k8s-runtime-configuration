@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telemetry-service
+  labels:
+    app: telemetry-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telemetry-service
+  template:
+    metadata:
+      labels:
+        app: telemetry-service
+    spec:
+      containers:
+      - name: telemetry-service
+        image: ghcr.io/amarchese96/telemetry-service:0.0.1
+        env:
+        - name: PROMETHEUS_ADDRESS
+          values: http://prometheus-server.istio-system:9090
+        ports:
+        - containerPort: 8080
