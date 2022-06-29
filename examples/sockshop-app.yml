@@ -4,6 +4,7 @@ metadata:
   name: sockshop-app
 spec:
   name: sock-shop
-  namespace: sock-shop
-  topologyKey: "kubernetes.io/region"
-  rescheduleDelay: 60
+  namespace: default
+  topologyKey: "no-key"
+  rescheduleDelay: 120
+  rescheduleFactor: 10

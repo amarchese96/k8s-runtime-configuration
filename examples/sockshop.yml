@@ -4,18 +4,18 @@ metadata:
   name: carts
   labels:
     app: sock-shop
-    node: carts
+    svc: carts
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: sock-shop
-      node: carts
+      svc: carts
   template:
     metadata:
       labels:
         app: sock-shop
-        node: carts
+        svc: carts
     spec:
       containers:
       - name: carts
@@ -24,9 +24,9 @@ spec:
          - name: JAVA_OPTS
            value: -Xms64m -Xmx128m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false
         resources:
-          limits:
-            cpu: 300m
-            memory: 500Mi
+          #limits:
+          #  cpu: 300m
+          #  memory: 500Mi
           requests:
             cpu: 100m
             memory: 200Mi
@@ -48,18 +48,17 @@ spec:
         - name: tmp-volume
           emptyDir:
             medium: Memory
-      nodeSelector:
-        beta.kubernetes.io/os: linux
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: carts
   annotations:
-        prometheus.io/scrape: 'false'
+    prometheus.io/scrape: 'false'
   labels:
     app: sock-shop
-    node: carts
+    svc: carts
 spec:
   ports:
     # the port that this service should serve on
@@ -67,7 +66,7 @@ spec:
     targetPort: 80
   selector:
     app: sock-shop
-    node: carts
+    svc: carts
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -75,18 +74,18 @@ metadata:
   name: carts-db
   labels:
     app: sock-shop
-    node: carts-db
+    svc: carts-db
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: sock-shop
-      node: carts-db
+      svc: carts-db
   template:
     metadata:
       labels:
         app: sock-shop
-        node: carts-db
+        svc: carts-db
     spec:
       containers:
       - name: carts-db
@@ -110,8 +109,7 @@ spec:
         - name: tmp-volume
           emptyDir:
             medium: Memory
-      nodeSelector:
-        beta.kubernetes.io/os: linux
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
@@ -119,7 +117,7 @@ metadata:
   name: carts-db
   labels:
     app: sock-shop
-    node: carts-db
+    svc: carts-db
 spec:
   ports:
     # the port that this service should serve on
@@ -127,7 +125,7 @@ spec:
     targetPort: 27017
   selector:
     app: sock-shop
-    node: carts-db
+    svc: carts-db
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -135,18 +133,18 @@ metadata:
   name: catalogue
   labels:
     app: sock-shop
-    node: catalogue
+    svc: catalogue
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: sock-shop
-      node: catalogue
+      svc: catalogue
   template:
     metadata:
       labels:
         app: sock-shop
-        node: catalogue
+        svc: catalogue
     spec:
       containers:
       - name: catalogue
@@ -155,9 +153,9 @@ spec:
         args:
         - -port=80
         resources:
-          limits:
-            cpu: 200m
-            memory: 200Mi
+          #limits:
+          #  cpu: 200m
+          #  memory: 200Mi
           requests:
             cpu: 100m
             memory: 100Mi
@@ -176,26 +174,25 @@ spec:
           httpGet:
             path: /health
             port: 80
-          initialDelaySeconds: 300
+          initialDelaySeconds: 30
           periodSeconds: 3
         readinessProbe:
           httpGet:
             path: /health
             port: 80
-          initialDelaySeconds: 180
+          initialDelaySeconds: 30
           periodSeconds: 3
-      nodeSelector:
-        beta.kubernetes.io/os: linux
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: catalogue
   annotations:
-        prometheus.io/scrape: 'false'
+    prometheus.io/scrape: 'false'
   labels:
     app: sock-shop
-    node: catalogue
+    svc: catalogue
 spec:
   ports:
     # the port that this service should serve on
@@ -203,7 +200,7 @@ spec:
     targetPort: 80
   selector:
     app: sock-shop
-    node: catalogue
+    svc: catalogue
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -211,18 +208,18 @@ metadata:
   name: catalogue-db
   labels:
     app: sock-shop
-    node: catalogue-db
+    svc: catalogue-db
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: sock-shop
-      node: catalogue-db
+      svc: catalogue-db
   template:
     metadata:
       labels:
         app: sock-shop
-        node: catalogue-db
+        svc: catalogue-db
     spec:
       containers:
       - name: catalogue-db
@@ -235,8 +232,7 @@ spec:
         ports:
         - name: mysql
           containerPort: 3306
-      nodeSelector:
-        beta.kubernetes.io/os: linux
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
@@ -244,7 +240,7 @@ metadata:
   name: catalogue-db
   labels:
     app: sock-shop
-    node: catalogue-db
+    svc: catalogue-db
 spec:
   ports:
     # the port that this service should serve on
@@ -252,7 +248,7 @@ spec:
     targetPort: 3306
   selector:
     app: sock-shop
-    node: catalogue-db
+    svc: catalogue-db
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -260,26 +256,26 @@ metadata:
   name: front-end
   labels:
     app: sock-shop
-    node: front-end
+    svc: front-end
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: sock-shop
-      node: front-end
+      svc: front-end
   template:
     metadata:
       labels:
         app: sock-shop
-        node: front-end
+        svc: front-end
     spec:
       containers:
       - name: front-end
         image: weaveworksdemos/front-end:0.3.12
         resources:
-          limits:
-            cpu: 300m
-            memory: 1000Mi
+          #limits:
+          #  cpu: 300m
+          #  memory: 1000Mi
           requests:
             cpu: 100m
             memory: 300Mi
@@ -299,7 +295,7 @@ spec:
           httpGet:
             path: /
             port: 8079
-          initialDelaySeconds: 300
+          initialDelaySeconds: 30
           periodSeconds: 3
         readinessProbe:
           httpGet:
@@ -307,18 +303,17 @@ spec:
             port: 8079
           initialDelaySeconds: 30
           periodSeconds: 3
-      nodeSelector:
-        beta.kubernetes.io/os: linux
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: front-end
   annotations:
-        prometheus.io/scrape: 'false'
+    prometheus.io/scrape: 'false'
   labels:
     app: sock-shop
-    node: front-end
+    svc: front-end
 spec:
   type: NodePort
   ports:
@@ -327,7 +322,7 @@ spec:
     nodePort: 30001
   selector:
     app: sock-shop
-    node: front-end
+    svc: front-end
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -335,18 +330,18 @@ metadata:
   name: orders
   labels:
     app: sock-shop
-    node: orders
+    svc: orders
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: sock-shop
-      node: orders
+      svc: orders
   template:
     metadata:
       labels:
         app: sock-shop
-        node: orders
+        svc: orders
     spec:
       containers:
       - name: orders
@@ -355,9 +350,9 @@ spec:
          - name: JAVA_OPTS
            value: -Xms64m -Xmx128m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false
         resources:
-          limits:
-            cpu: 500m
-            memory: 500Mi
+          #limits:
+          #  cpu: 500m
+          #  memory: 500Mi
           requests:
             cpu: 100m
             memory: 300Mi
@@ -379,18 +374,17 @@ spec:
         - name: tmp-volume
           emptyDir:
             medium: Memory
-      nodeSelector:
-        beta.kubernetes.io/os: linux
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: orders
   annotations:
-        prometheus.io/scrape: 'false'
+    prometheus.io/scrape: 'false'
   labels:
     app: sock-shop
-    node: orders
+    svc: orders
 spec:
   ports:
     # the port that this service should serve on
@@ -398,7 +392,7 @@ spec:
     targetPort: 80
   selector:
     app: sock-shop
-    node: orders
+    svc: orders
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -406,18 +400,18 @@ metadata:
   name: orders-db
   labels:
     app: sock-shop
-    node: orders-db
+    svc: orders-db
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: sock-shop
-      node: orders-db
+      svc: orders-db
   template:
     metadata:
       labels:
         app: sock-shop
-        node: orders-db
+        svc: orders-db
     spec:
       containers:
       - name: orders-db
@@ -441,8 +435,7 @@ spec:
         - name: tmp-volume
           emptyDir:
             medium: Memory
-      nodeSelector:
-        beta.kubernetes.io/os: linux
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
@@ -450,7 +443,7 @@ metadata:
   name: orders-db
   labels:
     app: sock-shop
-    node: orders-db
+    svc: orders-db
 spec:
   ports:
     # the port that this service should serve on
@@ -458,7 +451,7 @@ spec:
     targetPort: 27017
   selector:
     app: sock-shop
-    node: orders-db
+    svc: orders-db
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -466,26 +459,26 @@ metadata:
   name: payment
   labels:
     app: sock-shop
-    node: payment
+    svc: payment
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: sock-shop
-      node: payment
+      svc: payment
   template:
     metadata:
       labels:
         app: sock-shop
-        node: payment
+        svc: payment
     spec:
       containers:
       - name: payment
         image: weaveworksdemos/payment:0.4.3
         resources:
-          limits:
-            cpu: 200m
-            memory: 200Mi
+          #limits:
+          #  cpu: 200m
+          #  memory: 200Mi
           requests:
             cpu: 99m
             memory: 100Mi
@@ -504,26 +497,25 @@ spec:
           httpGet:
             path: /health
             port: 80
-          initialDelaySeconds: 300
+          initialDelaySeconds: 30
           periodSeconds: 3
         readinessProbe:
           httpGet:
             path: /health
             port: 80
-          initialDelaySeconds: 180
+          initialDelaySeconds: 30
           periodSeconds: 3
-      nodeSelector:
-        beta.kubernetes.io/os: linux
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: payment
   annotations:
-        prometheus.io/scrape: 'false'
+    prometheus.io/scrape: 'false'
   labels:
     app: sock-shop
-    node: payment
+    svc: payment
 spec:
   ports:
     # the port that this service should serve on
@@ -531,7 +523,7 @@ spec:
     targetPort: 80
   selector:
     app: sock-shop
-    node: payment
+    svc: payment
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -539,18 +531,18 @@ metadata:
   name: queue-master
   labels:
     app: sock-shop
-    node: queue-master
+    svc: queue-master
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: sock-shop
-      node: queue-master
+      svc: queue-master
   template:
     metadata:
       labels:
         app: sock-shop
-        node: queue-master
+        svc: queue-master
     spec:
       containers:
       - name: queue-master
@@ -559,26 +551,25 @@ spec:
          - name: JAVA_OPTS
            value: -Xms64m -Xmx128m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false
         resources:
-          limits:
-            cpu: 300m
-            memory: 500Mi
+          #limits:
+          #  cpu: 300m
+          #  memory: 500Mi
           requests:
             cpu: 100m
             memory: 300Mi
         ports:
         - containerPort: 80
-      nodeSelector:
-        beta.kubernetes.io/os: linux
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: queue-master
   annotations:
-        prometheus.io/scrape: 'false'
+    prometheus.io/scrape: 'false'
   labels:
     app: sock-shop
-    node: queue-master
+    svc: queue-master
 spec:
   ports:
     # the port that this service should serve on
@@ -586,7 +577,7 @@ spec:
     targetPort: 80
   selector:
     app: sock-shop
-    node: queue-master
+    svc: queue-master
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -594,18 +585,18 @@ metadata:
   name: rabbitmq
   labels:
     app: sock-shop
-    node: rabbitmq
+    svc: rabbitmq
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: sock-shop
-      node: rabbitmq
+      svc: rabbitmq
   template:
     metadata:
       labels:
         app: sock-shop
-        node: rabbitmq
+        svc: rabbitmq
       annotations:
         prometheus.io/scrape: "false"
     spec:
@@ -632,19 +623,18 @@ spec:
         ports:
         - containerPort: 9090
           name: exporter
-      nodeSelector:
-        beta.kubernetes.io/os: linux
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: rabbitmq
   annotations:
-        prometheus.io/scrape: 'false'
-        prometheus.io/port: '9090'
+    prometheus.io/scrape: 'false'
+    prometheus.io/port: '9090'
   labels:
     app: sock-shop
-    node: rabbitmq
+    svc: rabbitmq
 spec:
   ports:
     # the port that this service should serve on
@@ -657,7 +647,7 @@ spec:
     protocol: TCP
   selector:
     app: sock-shop
-    node: rabbitmq
+    svc: rabbitmq
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -665,18 +655,18 @@ metadata:
   name: session-db
   labels:
     app: sock-shop
-    node: session-db
+    svc: session-db
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: sock-shop
-      node: session-db
+      svc: session-db
   template:
     metadata:
       labels:
         app: sock-shop
-        node: session-db
+        svc: session-db
       annotations:
         prometheus.io.scrape: "false"
     spec:
@@ -695,8 +685,7 @@ spec:
               - SETGID
               - SETUID
           readOnlyRootFilesystem: true
-      nodeSelector:
-        beta.kubernetes.io/os: linux
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
@@ -704,7 +693,7 @@ metadata:
   name: session-db
   labels:
     app: sock-shop
-    node: session-db
+    svc: session-db
 spec:
   ports:
     # the port that this service should serve on
@@ -712,7 +701,7 @@ spec:
     targetPort: 6379
   selector:
     app: sock-shop
-    node: session-db
+    svc: session-db
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -720,18 +709,18 @@ metadata:
   name: shipping
   labels:
     app: sock-shop
-    node: shipping
+    svc: shipping
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: sock-shop
-      node: shipping
+      svc: shipping
   template:
     metadata:
       labels:
         app: sock-shop
-        node: shipping
+        svc: shipping
     spec:
       containers:
       - name: shipping
@@ -742,9 +731,9 @@ spec:
          - name: JAVA_OPTS
            value: -Xms64m -Xmx128m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false
         resources:
-          limits:
-            cpu: 300m
-            memory: 500Mi
+          #limits:
+          #  cpu: 300m
+          #  memory: 500Mi
           requests:
             cpu: 100m
             memory: 300Mi
@@ -766,18 +755,17 @@ spec:
         - name: tmp-volume
           emptyDir:
             medium: Memory
-      nodeSelector:
-        beta.kubernetes.io/os: linux
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: shipping
   annotations:
-        prometheus.io/scrape: 'false'
+    prometheus.io/scrape: 'false'
   labels:
     app: sock-shop
-    node: shipping
+    svc: shipping
 spec:
   ports:
     # the port that this service should serve on
@@ -785,7 +773,7 @@ spec:
     targetPort: 80
   selector:
     app: sock-shop
-    node: shipping
+    svc: shipping
 
 ---
 apiVersion: apps/v1
@@ -794,26 +782,26 @@ metadata:
   name: user
   labels:
     app: sock-shop
-    node: user
+    svc: user
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: sock-shop
-      node: user
+      svc: user
   template:
     metadata:
       labels:
         app: sock-shop
-        node: user
+        svc: user
     spec:
       containers:
       - name: user
         image: weaveworksdemos/user:0.4.7
         resources:
-          limits:
-            cpu: 300m
-            memory: 200Mi
+          #limits:
+          #  cpu: 300m
+          #  memory: 200Mi
           requests:
             cpu: 100m
             memory: 100Mi
@@ -835,26 +823,25 @@ spec:
           httpGet:
             path: /health
             port: 80
-          initialDelaySeconds: 300
+          initialDelaySeconds: 30
           periodSeconds: 3
         readinessProbe:
           httpGet:
             path: /health
             port: 80
-          initialDelaySeconds: 180
+          initialDelaySeconds: 30
           periodSeconds: 3
-      nodeSelector:
-        beta.kubernetes.io/os: linux
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: user
   annotations:
-        prometheus.io/scrape: 'false'
+    prometheus.io/scrape: 'false'
   labels:
     app: sock-shop
-    node: user
+    svc: user
 spec:
   ports:
     # the port that this service should serve on
@@ -862,7 +849,7 @@ spec:
     targetPort: 80
   selector:
     app: sock-shop
-    node: user
+    svc: user
 
 ---
 apiVersion: apps/v1
@@ -871,18 +858,18 @@ metadata:
   name: user-db
   labels:
     app: sock-shop
-    node: user-db
+    svc: user-db
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: sock-shop
-      node: user-db
+      svc: user-db
   template:
     metadata:
       labels:
         app: sock-shop
-        node: user-db
+        svc: user-db
     spec:
       containers:
       - name: user-db
@@ -907,8 +894,7 @@ spec:
         - name: tmp-volume
           emptyDir:
             medium: Memory
-      nodeSelector:
-        beta.kubernetes.io/os: linux
+      schedulerName: scheduler-plugins-scheduler
 ---
 apiVersion: v1
 kind: Service
@@ -916,7 +902,7 @@ metadata:
   name: user-db
   labels:
     app: sock-shop
-    node: user-db
+    svc: user-db
 spec:
   ports:
     # the port that this service should serve on
@@ -924,4 +910,4 @@ spec:
     targetPort: 27017
   selector:
     app: sock-shop
-    node: user-db
+    svc: user-db

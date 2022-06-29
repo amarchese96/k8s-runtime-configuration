@@ -7,5 +7,7 @@ spec:
   - kube-master-01
   - kube-slave-01
   - kube-slave-02
-  - kube-slave-03
+  - kube-slave-11
+  - kube-slave-12
+  - kube-slave-13
   rescheduleDelay: 30

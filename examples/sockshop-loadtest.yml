@@ -5,7 +5,7 @@ metadata:
   labels:
     name: load-test
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       name: load-test
